@@ -59,6 +59,8 @@ namespace StarterAssets
 		private float _rotationVelocity;
 		private float _verticalVelocity;
 		private float _terminalVelocity = 53.0f;
+		private float _tempRotationSpeed;
+		private float _tempMoveSpeed;
 
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
@@ -108,6 +110,9 @@ namespace StarterAssets
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
+
+			_tempRotationSpeed = RotationSpeed;
+			_tempMoveSpeed = MoveSpeed;
 		}
 
 		private void Update()
@@ -264,5 +269,15 @@ namespace StarterAssets
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 		}
-	}
+
+		public void ChangeRotationSpeed(bool change)
+		{
+			RotationSpeed = !change ? _tempRotationSpeed : 0;
+		}
+
+        public void ChangeMoveSpeed(bool change)
+		{
+			MoveSpeed = !change ? _tempMoveSpeed : 0;
+		}
+    }
 }

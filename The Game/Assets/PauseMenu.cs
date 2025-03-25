@@ -10,6 +10,9 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private Canvas pauseMenu;
     [SerializeField] private bool muteMusic = false;
     [SerializeField] private AudioSource[] audiosToMute;
+    [SerializeField] private Animator animator;
+
+    private FirstPersonController controller;
 
     public bool AutoLockCursor { get; set; } = true;
 
@@ -21,38 +24,47 @@ public class PauseMenu : MonoBehaviour
         {
             audioSource = Camera.main.GetComponent<AudioSource>();
         }
+
+        controller = FindFirstObjectByType<FirstPersonController>();
     }
 
     private void Start()
     {
         pauseMenu.enabled = false;
+        animator.enabled = true;
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (Time.timeScale > 0)
+            if (!pauseMenu.enabled)
             {
+                animator.SetBool("isPaused", true);
+                controller.ChangeMoveSpeed(true);
+                controller.ChangeRotationSpeed(true);
                 EnablePauseMenu();
             }
             else
             {
+                animator.SetBool("isPaused", false);
+                controller.ChangeMoveSpeed(false);
+                controller.ChangeRotationSpeed(false);
                 Resume();
             }
         }
 
         if (AutoLockCursor)
         {
-            Cursor.lockState = Time.timeScale == 0 ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.lockState = pauseMenu.enabled ? CursorLockMode.None : CursorLockMode.Locked;
         }
     }
 
     public void EnablePauseMenu()
     {
         pauseMenu.enabled = !pauseMenu.enabled;
-        Time.timeScale = Time.timeScale == 1 ? 0 : 1;
-        Cursor.lockState = Time.timeScale == 1 ? CursorLockMode.Locked : CursorLockMode.None;
+        //Time.timeScale = Time.timeScale == 1 ? 0 : 1;
+        //Cursor.lockState = Time.timeScale == 1 ? CursorLockMode.Locked : CursorLockMode.None;
         if (muteMusic)
         {
             audioSource.Play();
@@ -83,8 +95,8 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         pauseMenu.enabled = false;
-        Time.timeScale = 1;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Time.timeScale = 1;
+        //Cursor.lockState = CursorLockMode.Locked;
         if (muteMusic)
         {
             audioSource.Stop();

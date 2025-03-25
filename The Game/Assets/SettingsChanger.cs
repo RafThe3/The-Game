@@ -9,13 +9,15 @@ public class SettingsChanger : MonoBehaviour
 {
     [SerializeField] private Slider slider;
     [SerializeField] private TextMeshProUGUI valueText;
-    [Tooltip("Which decimal place to convert into an integer (10 - tenths, 100 - hundredths, etc.")]
-    [Min(0), SerializeField] private int moveToDecimalPlace = 100;
+    [Min(0), Range(0, 3), SerializeField] private int moveDecimalPlaces = 1;
     [SerializeField] private string settingType = string.Empty;
+
+    private float decimalPlaces = 1;
 
     private void Start()
     {
         slider.value = PlayerPrefs.GetFloat(settingType, 1);
+        decimalPlaces = Mathf.Pow(10, moveDecimalPlaces);
     }
 
     private void Update()
@@ -25,7 +27,7 @@ public class SettingsChanger : MonoBehaviour
 
     private void AdjustSettings()
     {
-        if (moveToDecimalPlace % 10 != 0)
+        if (moveDecimalPlaces % 10 != 0)
         {
             throw new ArgumentException("Decimal place must match the decimal place value");
         }
@@ -37,11 +39,11 @@ public class SettingsChanger : MonoBehaviour
 
         if (!slider.wholeNumbers)
         {
-            slider.value = Mathf.Round(slider.value * moveToDecimalPlace) / moveToDecimalPlace;
+            slider.value = Mathf.Round(slider.value * decimalPlaces) / decimalPlaces;
         }
 
         PlayerPrefs.SetFloat(settingType, slider.value);
-        valueText.text = $"{PlayerPrefs.GetFloat(settingType) * moveToDecimalPlace}";
+        valueText.text = $"{PlayerPrefs.GetFloat(settingType) * decimalPlaces}";
     }
 
     public void AddSliderValue()
