@@ -9,13 +9,13 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private bool lockCursor = false;
+    [SerializeField] private bool fixLockCursor = false;
 
     private void Start()
     {
         Time.timeScale = 1;
 
-        Cursor.lockState = lockCursor ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.lockState = fixLockCursor ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
     public void LoadAScene(int scene)

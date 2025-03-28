@@ -36,20 +36,16 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
+        animator.SetBool("isPaused", pauseMenu.enabled);
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (!pauseMenu.enabled)
             {
-                animator.SetBool("isPaused", true);
-                controller.ChangeMoveSpeed(true);
-                controller.ChangeRotationSpeed(true);
                 EnablePauseMenu();
             }
             else
             {
-                animator.SetBool("isPaused", false);
-                controller.ChangeMoveSpeed(false);
-                controller.ChangeRotationSpeed(false);
                 Resume();
             }
         }
@@ -65,6 +61,8 @@ public class PauseMenu : MonoBehaviour
         pauseMenu.enabled = !pauseMenu.enabled;
         //Time.timeScale = Time.timeScale == 1 ? 0 : 1;
         //Cursor.lockState = Time.timeScale == 1 ? CursorLockMode.Locked : CursorLockMode.None;
+        controller.ChangeRotationSpeed(true);
+        controller.ChangeMoveSpeed(true);
         if (muteMusic)
         {
             audioSource.Play();
@@ -97,6 +95,8 @@ public class PauseMenu : MonoBehaviour
         pauseMenu.enabled = false;
         //Time.timeScale = 1;
         //Cursor.lockState = CursorLockMode.Locked;
+        controller.ChangeRotationSpeed(false);
+        controller.ChangeMoveSpeed(false);
         if (muteMusic)
         {
             audioSource.Stop();
