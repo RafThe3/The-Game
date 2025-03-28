@@ -27,11 +27,6 @@ public class SettingsChanger : MonoBehaviour
 
     private void AdjustSettings()
     {
-        if (moveDecimalPlaces % 10 != 0)
-        {
-            throw new ArgumentException("Decimal place must match the decimal place value");
-        }
-
         if (settingType == string.Empty)
         {
             throw new ArgumentException("Setting type requires a name.");
@@ -43,7 +38,7 @@ public class SettingsChanger : MonoBehaviour
         }
 
         PlayerPrefs.SetFloat(settingType, slider.value);
-        valueText.text = $"{PlayerPrefs.GetFloat(settingType) * decimalPlaces}";
+        valueText.text = $"{PlayerPrefs.GetFloat(settingType) * decimalPlaces}%";
     }
 
     public void AddSliderValue()
