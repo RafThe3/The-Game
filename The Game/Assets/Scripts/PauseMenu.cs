@@ -38,16 +38,9 @@ public class PauseMenu : MonoBehaviour
     {
         animator.SetBool("isPaused", pauseMenu.enabled);
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !pauseMenu.enabled)
         {
-            if (!pauseMenu.enabled)
-            {
-                EnablePauseMenu();
-            }
-            else
-            {
-                Resume();
-            }
+            EnablePauseMenu();
         }
 
         if (AutoLockCursor)
