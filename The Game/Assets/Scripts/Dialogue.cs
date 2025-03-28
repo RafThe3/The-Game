@@ -49,7 +49,7 @@ public class Dialogue : MonoBehaviour
                 DisplayNextDialogue();
             }
 
-            interactTextBox.text = textBox.text != "" ? "press [g] to continue" : "press [e] to interact";
+            interactTextBox.text = textBox.text != "" ? "press [g] to continue" + "\n press [e] to restart conversation" : "press [e] to interact";
         }
     }
     private IEnumerator Write(string sentence)
