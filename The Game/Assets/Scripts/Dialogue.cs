@@ -10,8 +10,11 @@ using Unity.VisualScripting;
 
 public class Dialogue : MonoBehaviour
 {
+    [SerializeField] private bool canTalk = true;
+    [SerializeField] private bool giveObjective = false;
     [TextArea(3, 5), SerializeField] private string[] dialogue = null;
-    [SerializeField] private TextMeshProUGUI textBox, nameTextBox, interactTextBox;
+    [TextArea(3, 5), SerializeField] private string objective = null;
+    [SerializeField] private TextMeshProUGUI textBox, nameTextBox, interactTextBox, objectiveText;
     [SerializeField] private float interactionDistance = 1;
     [SerializeField] private float dialogueSpeed = 1;
     [SerializeField] private AudioClip dialogueSFX;
@@ -31,6 +34,11 @@ public class Dialogue : MonoBehaviour
 
     private void Update()
     {
+        if (!canTalk)
+        {
+            return;
+        }
+
         Vector3 playerPosition = player.transform.position - transform.position;
         bool isPlayerNear = playerPosition.magnitude < interactionDistance;
         textBox.enabled = isPlayerNear;
@@ -52,6 +60,7 @@ public class Dialogue : MonoBehaviour
             interactTextBox.text = textBox.text != "" ? "press [g] to continue" + "\n press [e] to restart conversation" : "press [e] to interact";
         }
     }
+
     private IEnumerator Write(string sentence)
     {
         isTalking = true;
@@ -88,6 +97,10 @@ public class Dialogue : MonoBehaviour
         if (dialogueQueue.Count == 0)
         {
             EndDialogue();
+            if (giveObjective)
+            {
+                objectiveText.text = $"Objective: {objective}";
+            }
             return;
         }
 
