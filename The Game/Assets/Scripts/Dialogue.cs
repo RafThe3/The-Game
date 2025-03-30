@@ -77,7 +77,7 @@ public class Dialogue : MonoBehaviour
 
         isTalking = false;
     }
-
+    
     private void StartDialogue()
     {
         Debug.Log("Start of conversation");

@@ -8,27 +8,33 @@ using UnityEngine.SceneManagement;
 
 public class SaveSystem : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI progressText;
-    [SerializeField] private float textDuration = 1;
+    [SerializeField] private bool test = false;
+    //[SerializeField] private TextMeshProUGUI progressText;
+    //[SerializeField] private float textDuration = 1;
 
     private static readonly string keyWord = "password";
     private string file;
-    private Player player;
+    private GameObject player;
 
     private void Awake()
     {
         file = $"{Application.persistentDataPath}/{name}.json";
 
-        player = GetComponent<Player>();
+        player = GameObject.FindWithTag("Player");
     }
 
     private void Start()
     {
-        progressText.enabled = false;
+        //progressText.enabled = false;
     }
 
     private void Update()
     {
+        if (!test)
+        {
+            return;
+        }
+        
         if (Input.GetKeyDown(KeyCode.P))
         {
             Save();
@@ -50,17 +56,9 @@ public class SaveSystem : MonoBehaviour
         //Save player values
         SaveData myData = new()
         {
-            x = transform.position.x,
-            y = transform.position.y,
-            z = transform.position.z,
-            /*
-            currentHealth = player.GetCurrentHealth,
-            maxHealth = player.GetMaxHealth,
-            currentLevel = player.GetCurrentLevel,
-            currentLevelUpXP = player.GetLevelUpXP,
-            currentXP = player.GetCurrentXP,
-            */
-            scene = SceneManager.GetActiveScene().buildIndex
+            x = player.transform.position.x,
+            y = player.transform.position.y,
+            z = player.transform.position.z,
         };
         //
 
@@ -70,8 +68,10 @@ public class SaveSystem : MonoBehaviour
         File.WriteAllText(file, myDataString);
         //
 
+        /*
         progressText.text = "Progress saved!";
         StartCoroutine(ShowProgressText(textDuration));
+        */
     }
 
     public void Load()
@@ -85,20 +85,12 @@ public class SaveSystem : MonoBehaviour
             //
 
             //Load player values
-            transform.position = new Vector3(myData.x, myData.y, myData.z);
+            player.transform.position = new Vector3(myData.x, myData.y, myData.z);
 
             /*
-            player.SetCurrentHealth(myData.currentHealth);
-            player.SetMaxHealth(myData.maxHealth);
-            player.SetCurrentLevel(myData.currentLevel);
-            player.SetCurrentLevelUpXP(myData.currentLevelUpXP);
-            player.SetCurrentXP(myData.currentXP);
-            */
-
-            //
-
             progressText.text = "Progress loaded!";
             StartCoroutine(ShowProgressText(textDuration));
+            */
         }
     }
 
@@ -121,11 +113,11 @@ public class SaveSystem : MonoBehaviour
 
     private IEnumerator ShowProgressText(float duration)
     {
-        progressText.enabled = true;
+        //progressText.enabled = true;
 
         yield return new WaitForSeconds(duration);
 
-        progressText.enabled = false;
+        //progressText.enabled = false;
     }
 }
 
