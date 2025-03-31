@@ -61,6 +61,8 @@ namespace StarterAssets
 		private float _terminalVelocity = 53.0f;
 		private float _tempRotationSpeed;
 		private float _tempMoveSpeed;
+		public float _tempSprintSpeed;
+		public bool _isSprinting;
 
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
@@ -113,6 +115,7 @@ namespace StarterAssets
 
 			_tempRotationSpeed = RotationSpeed;
 			_tempMoveSpeed = MoveSpeed;
+			_tempSprintSpeed = SprintSpeed;
 		}
 
 		private void Update()
@@ -120,6 +123,7 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
+			_isSprinting = _input.sprint;
 		}
 
 		private void LateUpdate()

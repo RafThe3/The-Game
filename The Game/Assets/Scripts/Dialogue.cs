@@ -13,7 +13,7 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private bool canTalk = true;
     [SerializeField] private bool giveObjective = false;
     [TextArea(3, 5), SerializeField] private string[] dialogue = null;
-    [TextArea(3, 5), SerializeField] private string objective = null;
+    [TextArea(3, 5), SerializeField] private string objective = string.Empty;
     [SerializeField] private TextMeshProUGUI textBox, nameTextBox, interactTextBox, objectiveText;
     [SerializeField] private float interactionDistance = 1;
     [SerializeField] private float dialogueSpeed = 1;
@@ -23,13 +23,15 @@ public class Dialogue : MonoBehaviour
     private Canvas pauseMenu;
     private GameObject player;
     private bool isTalking = false;
+    private bool hasInteracted = false;
 
     private void Start()
     {
         dialogueQueue = new();
         pauseMenu = FindFirstObjectByType<PauseMenu>().GetComponent<Canvas>();
         player = GameObject.FindWithTag("Player");
-        EndDialogue();
+        textBox.text = string.Empty;
+        nameTextBox.text = string.Empty;
     }
 
     private void Update()
@@ -49,6 +51,7 @@ public class Dialogue : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
+                hasInteracted = true;
                 StartDialogue();
             }
 
@@ -57,7 +60,7 @@ public class Dialogue : MonoBehaviour
                 DisplayNextDialogue();
             }
 
-            interactTextBox.text = textBox.text != "" ? "press [g] to continue" + "\n press [e] to restart conversation" : "press [e] to interact";
+            interactTextBox.text = textBox.text != string.Empty ? "press [g] to continue" + "\n press [e] to restart conversation" : "press [e] to interact";
         }
     }
 
@@ -65,7 +68,7 @@ public class Dialogue : MonoBehaviour
     {
         isTalking = true;
 
-        EndDialogue();
+        textBox.text = string.Empty;
         nameTextBox.text = name;
 
         foreach (char c in sentence.ToCharArray())
@@ -97,10 +100,11 @@ public class Dialogue : MonoBehaviour
         if (dialogueQueue.Count == 0)
         {
             EndDialogue();
-            if (giveObjective)
+            if (hasInteracted && giveObjective)
             {
                 objectiveText.text = $"Objective: {objective}";
             }
+            hasInteracted = false;
             return;
         }
 
@@ -111,8 +115,8 @@ public class Dialogue : MonoBehaviour
 
     private void EndDialogue()
     {
-        textBox.text = "";
-        nameTextBox.text = "";
+        textBox.text = string.Empty;
+        nameTextBox.text = string.Empty;
         Debug.Log("End of conversation");
     }
 
