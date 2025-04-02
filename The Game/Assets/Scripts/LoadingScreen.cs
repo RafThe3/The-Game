@@ -33,7 +33,6 @@ public class LoadingScreen : MonoBehaviour
         {
             float loadProgess = Mathf.Clamp01(async.progress / 0.9f);
             loadingBar.value = loadProgess;
-            Debug.Log(loadProgess);
             yield return null;
         }
     }
@@ -60,7 +59,6 @@ public class LoadingScreen : MonoBehaviour
         {
             float loadProgess = Mathf.Clamp01(async.progress / 0.9f);
             loadingBar.value = loadProgess;
-            Debug.Log(loadProgess);
             yield return null;
         }
     }

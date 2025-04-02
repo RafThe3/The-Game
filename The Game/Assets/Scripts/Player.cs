@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Rendering;
 
 public class Player : MonoBehaviour
 {
@@ -38,10 +39,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        float x = Mathf.Round(transform.position.x);
-        float y = Mathf.Round(transform.position.y);
-        float z = Mathf.Round(transform.position.z);
-        coordinatesText.text = $"x: {x} \ny: {y} \nz: {z}";
+        UpdateCoordinates();
 
         isMoving = Mathf.Abs(character.velocity.x) > Mathf.Epsilon;
 
@@ -49,6 +47,15 @@ public class Player : MonoBehaviour
         {
             Sprint();
         }
+    }
+
+    private void UpdateCoordinates()
+    {
+        float x = Mathf.Round(transform.position.x);
+        float y = Mathf.Round(transform.position.y);
+        float z = Mathf.Round(transform.position.z);
+        
+        coordinatesText.text = $"x: {x} \ny: {y} \nz: {z}";
     }
 
     private void Sprint()

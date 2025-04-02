@@ -9,7 +9,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private bool endlessSpawn = false;
     [SerializeField] private bool distanceLimit = false;
     [Min(0), SerializeField] private float spawnDistance = 1;
-    [Min(0), SerializeField] private int numberOfObjects = 1;
+    [Min(0), SerializeField] private int numObjectsToSpawn = 1;
     [Min(0), SerializeField] private float spawnInterval = 1;
     
     //Internal Variables
@@ -31,7 +31,7 @@ public class Spawner : MonoBehaviour
         GameObject player = GameObject.FindWithTag("Player");
         Vector3 playerPos = player.transform.position - transform.position;
 
-        bool isReadyToSpawn = spawnTimer >= spawnInterval && ((objectsSpawned < numberOfObjects && !endlessSpawn) || endlessSpawn);
+        bool isReadyToSpawn = spawnTimer >= spawnInterval && ((objectsSpawned < numObjectsToSpawn && !endlessSpawn) || endlessSpawn);
         bool isPlayerNear = playerPos.magnitude < spawnDistance && distanceLimit;
 
         if (!isReadyToSpawn || (!isPlayerNear && distanceLimit))
