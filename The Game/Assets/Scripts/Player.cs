@@ -18,12 +18,13 @@ public class Player : MonoBehaviour
     [SerializeField] private Slider staminaBar;
     [SerializeField] private Image staminaBarFillArea;
     [SerializeField] private Animator staminaAnimator;
-    [SerializeField] private TextMeshProUGUI coordinatesText;
+    [SerializeField] private TextMeshProUGUI coordinatesText, interactTextBox;
 
     private FirstPersonController controller;
     private CharacterController character;
     private bool isMoving;
     private bool isOnSprintCooldown;
+    private readonly string interactText = "Press [e] to interact";
 
     private void Awake()
     {
@@ -35,11 +36,25 @@ public class Player : MonoBehaviour
     {
         staminaBar.maxValue = sprintDuration;
         staminaBar.value = sprintDuration;
+        interactTextBox.enabled = false;
     }
 
     private void Update()
     {
         UpdateCoordinates();
+        bool isInteractable = false;
+
+        if (interactTextBox.text == string.Empty)
+        {
+            interactTextBox.text = interactText;
+        }
+
+        if (Physics.Raycast(new Ray(Camera.main.transform.position, Camera.main.transform.forward), out RaycastHit hit, 2.3f))
+        {
+            isInteractable = hit.collider.CompareTag("Interactable");
+        }
+
+        interactTextBox.enabled = isInteractable;
 
         isMoving = Mathf.Abs(character.velocity.x) > Mathf.Epsilon;
 
