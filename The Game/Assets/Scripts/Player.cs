@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Image staminaBarFillArea;
     [SerializeField] private Animator staminaAnimator;
     [SerializeField] private TextMeshProUGUI coordinatesText, interactTextBox;
+    [SerializeField] private float raycastHitDistance = 1;
 
     private FirstPersonController controller;
     private CharacterController character;
@@ -42,19 +43,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         UpdateCoordinates();
-        bool isInteractable = false;
-
-        if (interactTextBox.text == string.Empty)
-        {
-            interactTextBox.text = interactText;
-        }
-
-        if (Physics.Raycast(new Ray(Camera.main.transform.position, Camera.main.transform.forward), out RaycastHit hit, 2.3f))
-        {
-            isInteractable = hit.collider.CompareTag("Interactable");
-        }
-
-        interactTextBox.enabled = isInteractable;
+        ToggleInteract();
 
         isMoving = Mathf.Abs(character.velocity.x) > Mathf.Epsilon;
 
@@ -62,6 +51,25 @@ public class Player : MonoBehaviour
         {
             Sprint();
         }
+    }
+
+    private void ToggleInteract()
+    {
+        bool isInteractable = false;
+
+        if (interactTextBox.text == string.Empty)
+        {
+            interactTextBox.text = interactText;
+        }
+
+        Ray ray = new(Camera.main.transform.position, Camera.main.transform.forward);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, raycastHitDistance))
+        {
+            isInteractable = hit.collider.CompareTag("Interactable");
+        }
+
+        interactTextBox.enabled = isInteractable;
     }
 
     private void UpdateCoordinates()

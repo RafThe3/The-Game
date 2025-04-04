@@ -10,7 +10,8 @@ using Unity.VisualScripting;
 
 public class NPC : MonoBehaviour
 {
-    [SerializeField] private bool canTalk = true;
+    [Header("NPC")]
+    [SerializeField] private bool enableDialogue = true;
     [SerializeField] private bool giveObjective = false;
     [TextArea(3, 5), SerializeField] private string[] dialogue = null;
     [TextArea(3, 5), SerializeField] private string objective = string.Empty;
@@ -18,7 +19,14 @@ public class NPC : MonoBehaviour
     [SerializeField] private float interactionDistance = 1;
     [SerializeField] private float dialogueSpeed = 1;
     [SerializeField] private AudioClip dialogueSFX;
-    [SerializeField] private Interactable interactable;
+
+    [Header("Interactables")]
+    [SerializeField] private bool triggerInteractable = false;
+    [SerializeField] private Interactable[] interactables;
+    [SerializeField] private bool triggerDialogue = false;
+    [SerializeField] private NPC[] npcs;
+    [SerializeField] private bool disableDialogue = false;
+
 
     private Queue<string> dialogueQueue;
     private Canvas pauseMenu;
@@ -26,6 +34,7 @@ public class NPC : MonoBehaviour
     private bool isTalking = false;
     private bool hasInteracted = false;
     private readonly string dialogueControls = "Press [g] to continue" + "\n Press [e] to restart conversation";
+    private bool canTalk = true;
 
     private void Start()
     {
@@ -38,15 +47,25 @@ public class NPC : MonoBehaviour
 
     private void Update()
     {
-        if (!canTalk)
+        tag = enableDialogue ? "Interactable" : "Untagged";
+
+        if (!enableDialogue)
         {
             return;
         }
 
         Vector3 playerPosition = player.transform.position - transform.position;
         bool isPlayerNear = playerPosition.magnitude < interactionDistance;
+        canTalk = isPlayerNear;
+
+        if (!canTalk)
+        {
+            return;
+        }
+
         dialogueTextBox.enabled = isPlayerNear;
         nameTextBox.enabled = isPlayerNear;
+        
         if (hasInteracted)
         {
             interactTextBox.enabled = isPlayerNear;
@@ -86,7 +105,7 @@ public class NPC : MonoBehaviour
         {
             textBox.text += c;
             Camera.main.GetComponent<AudioSource>().PlayOneShot(dialogueSFX);
-            yield return new WaitForSecondsRealtime(dialogueSpeed);
+            yield return new WaitForSecondsRealtime(0.1f / dialogueSpeed);
         }
 
         isTalking = false;
@@ -115,7 +134,14 @@ public class NPC : MonoBehaviour
             {
                 StartCoroutine(Write($"Objective: {objective}", objectiveTextBox));
                 objective = string.Empty;
-                interactable.EnableInteract();
+            }
+            if (triggerDialogue)
+            {
+                TriggerDialogue();
+            }
+            if (triggerInteractable)
+            {
+                TriggerInteractable();
             }
             hasInteracted = false;
             return;
@@ -131,6 +157,10 @@ public class NPC : MonoBehaviour
         dialogueTextBox.text = string.Empty;
         nameTextBox.text = string.Empty;
         interactTextBox.text = string.Empty;
+        if (disableDialogue)
+        {
+            enableDialogue = false;
+        }
         Debug.Log("End of conversation");
     }
 
@@ -138,6 +168,26 @@ public class NPC : MonoBehaviour
     {
         this.dialogue = dialogue;
     }
+
+    private void TriggerDialogue()
+    {
+        foreach (NPC n in npcs)
+        {
+            n.EnableDialogue();
+        }
+    }
+
+    private void TriggerInteractable()
+    {
+        foreach (Interactable i in interactables)
+        {
+            i.EnableInteract();
+        }
+    }
+
+    public void EnableDialogue() => enableDialogue = true;
+
+    public bool CanTalk => enableDialogue;
 
     private void OnDrawGizmos()
     {

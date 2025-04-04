@@ -1,14 +1,22 @@
 using UnityEngine;
 using TMPro;
+using UnityEditor.Embree;
+using System.Collections;
 
 public class Interactable : MonoBehaviour
 {
+    [Header("Interactable")]
     [SerializeField] private bool isInteractable = true;
     [SerializeField] private TextMeshProUGUI interactTextBox, objectiveTextBox;
     [SerializeField] private bool giveObjective = true;
     [TextArea(2, 1), SerializeField] private string objective = string.Empty;
-    [TextArea(3, 5), SerializeField] private string[] dialogue = null;
+    [SerializeField] private float objectiveTextSpeed = 1;
+    [SerializeField] private AudioClip objectiveTextSFX;
     [SerializeField] private float interactionDistance = 1;
+
+    [Header("NPCs")]
+    [TextArea(3, 5), SerializeField] private string[] dialogue = null;
+    [SerializeField] private bool triggerDialogue = false;
     [SerializeField] private NPC npc;
 
     private GameObject player;
@@ -27,6 +35,8 @@ public class Interactable : MonoBehaviour
 
     private void Update()
     {
+        tag = isInteractable ? "Interactable" : "Untagged";
+
         if (!isInteractable)
         {
             return;
@@ -35,21 +45,29 @@ public class Interactable : MonoBehaviour
         Vector3 playerPosition = player.transform.position - transform.position;
         bool isPlayerNear = playerPosition.magnitude < interactionDistance;
 
-        if (isPlayerNear)
+        if (isPlayerNear && Input.GetKeyDown(interactButton) && giveObjective)
         {
-            if (Input.GetKeyDown(interactButton) && giveObjective)
-            {
-                objectiveTextBox.text = $"Objective: {objective}";
-                npc.ChangeDialogue(dialogue);
-            }
+            StartCoroutine(Write($"Objective: {objective}", objectiveTextBox));
+            npc.ChangeDialogue(dialogue);
             isInteractable = false;
         }
     }
 
-    public void EnableInteract()
+    private IEnumerator Write(string sentence, TextMeshProUGUI textBox)
     {
-        isInteractable = true;
+        textBox.text = string.Empty;
+
+        foreach (char c in sentence.ToCharArray())
+        {
+            textBox.text += c;
+            Camera.main.GetComponent<AudioSource>().PlayOneShot(objectiveTextSFX);
+            yield return new WaitForSecondsRealtime(0.1f / objectiveTextSpeed);
+        }
     }
+
+    public void EnableInteract() => isInteractable = true;
+
+    public bool IsInteractable => isInteractable;
 
     private void OnDrawGizmos()
     {
