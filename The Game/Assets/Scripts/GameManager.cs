@@ -6,6 +6,7 @@ using TMPro;
 using UnityEditor;
 using UnityEditor.Profiling;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
