@@ -15,9 +15,9 @@ public class Interactable : MonoBehaviour
     [SerializeField] private float interactionDistance = 1;
 
     [Header("NPCs")]
-    [TextArea(3, 5), SerializeField] private string[] dialogue = null;
+    [SerializeField] private Dialogue npc;
     [SerializeField] private bool triggerDialogue = false;
-    [SerializeField] private NPC npc;
+    [TextArea(3, 5), SerializeField] private string[] dialogue = null;
 
     private GameObject player;
     private readonly KeyCode interactButton = KeyCode.E;

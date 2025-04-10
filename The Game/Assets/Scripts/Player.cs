@@ -5,6 +5,7 @@ using UnityEngine.InputSystem.XR;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Rendering;
+using NUnit.Framework.Constraints;
 
 public class Player : MonoBehaviour
 {
@@ -26,11 +27,17 @@ public class Player : MonoBehaviour
     private bool isMoving;
     private bool isOnSprintCooldown;
     private readonly string interactText = "Press [e] to interact";
+    private float collectibles = 0;
+    private Canvas pauseMenu;
+    private bool isNPC, isInteractable, isCollectible;
+    private RaycastHit hit;
+    private Ray ray;
 
     private void Awake()
     {
         character = GetComponent<CharacterController>();
         controller = GetComponent<FirstPersonController>();
+        pauseMenu = FindFirstObjectByType<PauseMenu>().GetComponent<Canvas>();
     }
 
     private void Start()
@@ -38,6 +45,7 @@ public class Player : MonoBehaviour
         staminaBar.maxValue = sprintDuration;
         staminaBar.value = sprintDuration;
         interactTextBox.enabled = false;
+        ray = new(Camera.main.transform.position, Camera.main.transform.forward);
     }
 
     private void Update()
@@ -55,21 +63,40 @@ public class Player : MonoBehaviour
 
     private void ToggleInteract()
     {
-        bool isInteractable = false;
-
         if (interactTextBox.text == string.Empty)
         {
             interactTextBox.text = interactText;
         }
 
-        Ray ray = new(Camera.main.transform.position, Camera.main.transform.forward);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, raycastHitDistance))
+        if (Physics.Raycast(ray, out hit, raycastHitDistance))
         {
             isInteractable = hit.collider.CompareTag("Interactable");
+            isNPC = hit.collider.CompareTag("NPC");
+            isCollectible = hit.collider.CompareTag("Collectible");
         }
 
-        interactTextBox.enabled = isInteractable;
+        interactTextBox.enabled = isInteractable || isNPC || isCollectible;
+
+        TriggerDialogue();
+    }
+
+    private void TriggerDialogue()
+    {
+        if (isNPC)
+        {
+            Dialogue npc = hit.collider.GetComponent<Dialogue>();
+            if (!npc.HasInteracted && Input.GetKeyDown(KeyCode.E))
+            {
+                npc.StartDialogue();
+            }
+
+            if (!npc.IsTalking && Input.GetKeyDown(KeyCode.G) && !pauseMenu.enabled)
+            {
+                npc.DisplayNextDialogue();
+            }
+        }
+
+        Debug.Log($"is npc: {isNPC}, {isInteractable}, {isCollectible}");
     }
 
     private void UpdateCoordinates()

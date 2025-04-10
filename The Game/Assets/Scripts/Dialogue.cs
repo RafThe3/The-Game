@@ -8,7 +8,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 
-public class NPC : MonoBehaviour
+public class Dialogue : MonoBehaviour
 {
     [Header("NPC")]
     [SerializeField] private bool enableDialogue = true;
@@ -24,22 +24,20 @@ public class NPC : MonoBehaviour
     [SerializeField] private bool triggerInteractable = false;
     [SerializeField] private Interactable[] interactables;
     [SerializeField] private bool triggerDialogue = false;
-    [SerializeField] private NPC[] npcs;
+    [SerializeField] private Dialogue[] npcs;
     [SerializeField] private bool disableDialogue = false;
 
 
     private Queue<string> dialogueQueue;
-    private Canvas pauseMenu;
     private GameObject player;
     private bool isTalking = false;
     private bool hasInteracted = false;
-    private readonly string dialogueControls = "Press [g] to continue" + "\n Press [e] to restart conversation";
+    private readonly string dialogueControls = "Press [g] to continue";
     private bool canTalk = true;
 
     private void Start()
     {
         dialogueQueue = new();
-        pauseMenu = FindFirstObjectByType<PauseMenu>().GetComponent<Canvas>();
         player = GameObject.FindWithTag("Player");
         dialogueTextBox.text = string.Empty;
         nameTextBox.text = string.Empty;
@@ -47,7 +45,7 @@ public class NPC : MonoBehaviour
 
     private void Update()
     {
-        tag = enableDialogue ? "Interactable" : "Untagged";
+        tag = enableDialogue ? "NPC" : "Untagged";
 
         if (!enableDialogue)
         {
@@ -65,29 +63,10 @@ public class NPC : MonoBehaviour
 
         dialogueTextBox.enabled = isPlayerNear;
         nameTextBox.enabled = isPlayerNear;
-        
-        if (hasInteracted)
+
+        if (isPlayerNear && dialogueTextBox.text != string.Empty)
         {
-            interactTextBox.enabled = isPlayerNear;
-        }
-
-        if (isPlayerNear)
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                hasInteracted = true;
-                StartDialogue();
-            }
-
-            if (!isTalking && Input.GetKeyDown(KeyCode.G) && !pauseMenu.enabled)
-            {
-                DisplayNextDialogue();
-            }
-
-            if (dialogueTextBox.text != string.Empty)
-            {
-                interactTextBox.text = dialogueControls;
-            }
+            interactTextBox.text = dialogueControls;
         }
     }
 
@@ -104,16 +83,21 @@ public class NPC : MonoBehaviour
         foreach (char c in sentence.ToCharArray())
         {
             textBox.text += c;
-            Camera.main.GetComponent<AudioSource>().PlayOneShot(dialogueSFX);
-            yield return new WaitForSecondsRealtime(0.1f / dialogueSpeed);
+            if (c.ToString() != " ")
+            {
+                Camera.main.GetComponent<AudioSource>().PlayOneShot(dialogueSFX);
+            }
+            yield return new WaitForSeconds(0.1f / dialogueSpeed);
         }
 
         isTalking = false;
     }
     
-    private void StartDialogue()
+    public void StartDialogue()
     {
         Debug.Log("Start of conversation");
+
+        hasInteracted = true;
 
         dialogueQueue.Clear();
 
@@ -125,7 +109,7 @@ public class NPC : MonoBehaviour
         DisplayNextDialogue();
     }
 
-    private void DisplayNextDialogue()
+    public void DisplayNextDialogue()
     {
         if (dialogueQueue.Count == 0)
         {
@@ -171,7 +155,7 @@ public class NPC : MonoBehaviour
 
     private void TriggerDialogue()
     {
-        foreach (NPC n in npcs)
+        foreach (Dialogue n in npcs)
         {
             n.EnableDialogue();
         }
@@ -188,6 +172,10 @@ public class NPC : MonoBehaviour
     public void EnableDialogue() => enableDialogue = true;
 
     public bool CanTalk => enableDialogue;
+
+    public bool IsTalking => isTalking;
+
+    public bool HasInteracted => hasInteracted;
 
     private void OnDrawGizmos()
     {
