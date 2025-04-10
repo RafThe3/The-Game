@@ -29,9 +29,6 @@ public class Player : MonoBehaviour
     private readonly string interactText = "Press [e] to interact";
     private float collectibles = 0;
     private Canvas pauseMenu;
-    private bool isNPC, isInteractable, isCollectible;
-    private RaycastHit hit;
-    private Ray ray;
 
     private void Awake()
     {
@@ -45,7 +42,6 @@ public class Player : MonoBehaviour
         staminaBar.maxValue = sprintDuration;
         staminaBar.value = sprintDuration;
         interactTextBox.enabled = false;
-        ray = new(Camera.main.transform.position, Camera.main.transform.forward);
     }
 
     private void Update()
@@ -63,12 +59,16 @@ public class Player : MonoBehaviour
 
     private void ToggleInteract()
     {
+        bool isInteractable = false, isCollectible = false, isNPC = false;
+
         if (interactTextBox.text == string.Empty)
         {
             interactTextBox.text = interactText;
         }
 
-        if (Physics.Raycast(ray, out hit, raycastHitDistance))
+        Ray ray = new(Camera.main.transform.position, Camera.main.transform.forward);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, raycastHitDistance))
         {
             isInteractable = hit.collider.CompareTag("Interactable");
             isNPC = hit.collider.CompareTag("NPC");
@@ -77,11 +77,6 @@ public class Player : MonoBehaviour
 
         interactTextBox.enabled = isInteractable || isNPC || isCollectible;
 
-        TriggerDialogue();
-    }
-
-    private void TriggerDialogue()
-    {
         if (isNPC)
         {
             Dialogue npc = hit.collider.GetComponent<Dialogue>();
