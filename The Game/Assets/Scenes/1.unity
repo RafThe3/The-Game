@@ -1084,7 +1084,7 @@ GameObject:
   - component: {fileID: 194748644}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: NPC
+  m_TagString: Collectible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8242,11 +8242,11 @@ MonoBehaviour:
   objectiveTextSpeed: 2
   objectiveTextSFX: {fileID: 8300000, guid: 1dc2f2287b118ff45939a91b08a2244e, type: 3}
   interactionDistance: 3
+  npc: {fileID: 218454258}
+  triggerDialogue: 1
   dialogue:
   - now suck my cock
   - yeahhhhhhh
-  triggerDialogue: 1
-  npc: {fileID: 218454258}
 --- !u!54 &1432141008
 Rigidbody:
   m_ObjectHideFlags: 0
