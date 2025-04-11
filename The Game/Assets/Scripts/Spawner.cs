@@ -34,15 +34,13 @@ public class Spawner : MonoBehaviour
         bool isReadyToSpawn = spawnTimer >= spawnInterval && ((objectsSpawned < numObjectsToSpawn && !endlessSpawn) || endlessSpawn);
         bool isPlayerNear = playerPos.magnitude < spawnDistance && distanceLimit;
 
-        if (!isReadyToSpawn || (!isPlayerNear && distanceLimit))
+        if (isReadyToSpawn && (isPlayerNear || !distanceLimit))
         {
-            return;
+            int spawn = Random.Range(0, spawnPoints.Length), obj = Random.Range(0, prefabs.Length);
+            Instantiate(prefabs[obj], spawnPoints[spawn].transform.position, Quaternion.identity);
+            objectsSpawned++;
+            spawnTimer = 0;
         }
-
-        int spawn = Random.Range(0, spawnPoints.Length), obj = Random.Range(0, prefabs.Length);
-        Instantiate(prefabs[obj], spawnPoints[spawn].transform.position, Quaternion.identity);
-        objectsSpawned++;
-        spawnTimer = 0;
     }
 
     private void OnDrawGizmos()

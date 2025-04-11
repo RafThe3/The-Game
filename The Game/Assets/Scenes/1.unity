@@ -1382,10 +1382,10 @@ MonoBehaviour:
   - bruhs
   - 35 353 972 923 7
   objective: Secure the safeset and suck some veiny ahh dihhhhhh
-  dialogueTextBox: {fileID: 551355033}
-  nameTextBox: {fileID: 734243633}
   interactTextBox: {fileID: 1013875840}
   objectiveTextBox: {fileID: 1584641109}
+  dialogueTextBox: {fileID: 551355033}
+  nameTextBox: {fileID: 734243633}
   interactionDistance: 3
   dialogueSpeed: 2
   dialogueSFX: {fileID: 8300000, guid: 1dc2f2287b118ff45939a91b08a2244e, type: 3}
@@ -5080,10 +5080,10 @@ MonoBehaviour:
   - hhb s
   - gsgfs  bsfs
   objective: suck my cog
-  dialogueTextBox: {fileID: 551355033}
-  nameTextBox: {fileID: 734243633}
   interactTextBox: {fileID: 1013875840}
   objectiveTextBox: {fileID: 1584641109}
+  dialogueTextBox: {fileID: 551355033}
+  nameTextBox: {fileID: 734243633}
   interactionDistance: 3
   dialogueSpeed: 2
   dialogueSFX: {fileID: 8300000, guid: 1dc2f2287b118ff45939a91b08a2244e, type: 3}

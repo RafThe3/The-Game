@@ -15,7 +15,8 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private bool giveObjective = false;
     [TextArea(3, 5), SerializeField] private string[] dialogue = null;
     [TextArea(3, 5), SerializeField] private string objective = string.Empty;
-    [SerializeField] private TextMeshProUGUI dialogueTextBox, nameTextBox, interactTextBox, objectiveTextBox;
+    [SerializeField] private TextMeshProUGUI interactTextBox, objectiveTextBox;
+    public TextMeshProUGUI dialogueTextBox, nameTextBox;
     [SerializeField] private float interactionDistance = 1;
     [SerializeField] private float dialogueSpeed = 1;
     [SerializeField] private AudioClip dialogueSFX;
@@ -27,13 +28,11 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private Dialogue[] npcs;
     [SerializeField] private bool disableDialogue = false;
 
-
     private Queue<string> dialogueQueue;
     private GameObject player;
     private bool isTalking = false;
     private bool hasInteracted = false;
     private readonly string dialogueControls = "Press [g] to continue";
-    private bool canTalk = true;
 
     private void Start()
     {
@@ -54,15 +53,8 @@ public class Dialogue : MonoBehaviour
 
         Vector3 playerPosition = player.transform.position - transform.position;
         bool isPlayerNear = playerPosition.magnitude < interactionDistance;
-        canTalk = isPlayerNear;
 
-        if (!canTalk)
-        {
-            return;
-        }
-
-        dialogueTextBox.enabled = isPlayerNear;
-        nameTextBox.enabled = isPlayerNear;
+        Debug.Log(isPlayerNear);
 
         if (isPlayerNear && dialogueTextBox.text != string.Empty)
         {
@@ -171,7 +163,7 @@ public class Dialogue : MonoBehaviour
 
     public void EnableDialogue() => enableDialogue = true;
 
-    public bool CanTalk => enableDialogue;
+    public bool DialogueEnabled => enableDialogue;
 
     public bool IsTalking => isTalking;
 

@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
     private readonly string interactText = "Press [e] to interact";
     private float collectibles = 0;
     private Canvas pauseMenu;
+    private Ray ray;
 
     private void Awake()
     {
@@ -61,12 +62,12 @@ public class Player : MonoBehaviour
     {
         bool isInteractable = false, isCollectible = false, isNPC = false;
 
+        ray = new(Camera.main.transform.position, Camera.main.transform.forward);
+
         if (interactTextBox.text == string.Empty)
         {
             interactTextBox.text = interactText;
         }
-
-        Ray ray = new(Camera.main.transform.position, Camera.main.transform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, raycastHitDistance))
         {
@@ -80,18 +81,31 @@ public class Player : MonoBehaviour
         if (isNPC)
         {
             Dialogue npc = hit.collider.GetComponent<Dialogue>();
-            if (!npc.HasInteracted && Input.GetKeyDown(KeyCode.E))
-            {
-                npc.StartDialogue();
-            }
-
-            if (!npc.IsTalking && Input.GetKeyDown(KeyCode.G) && !pauseMenu.enabled)
-            {
-                npc.DisplayNextDialogue();
-            }
+            TriggerDialogue(npc);
+            npc.dialogueTextBox.enabled = true;
+            npc.nameTextBox.enabled = true;
+        }
+        else
+        {
+            Dialogue npc = hit.collider.GetComponent<Dialogue>();
+            npc.nameTextBox.enabled = false;
+            npc.dialogueTextBox.enabled = false;
         }
 
         Debug.Log($"is npc: {isNPC}, {isInteractable}, {isCollectible}");
+    }
+
+    private void TriggerDialogue(Dialogue npc)
+    {
+        if (!npc.HasInteracted && Input.GetKeyDown(KeyCode.E))
+        {
+            npc.StartDialogue();
+        }
+
+        if (!npc.IsTalking && Input.GetKeyDown(KeyCode.G) && !pauseMenu.enabled)
+        {
+            npc.DisplayNextDialogue();
+        }
     }
 
     private void UpdateCoordinates()
