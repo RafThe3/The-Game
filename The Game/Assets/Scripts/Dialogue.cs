@@ -54,12 +54,17 @@ public class Dialogue : MonoBehaviour
         Vector3 playerPosition = player.transform.position - transform.position;
         bool isPlayerNear = playerPosition.magnitude < interactionDistance;
 
+        dialogueTextBox.enabled = isPlayerNear;
+        nameTextBox.enabled = isPlayerNear;
+
         Debug.Log(isPlayerNear);
 
+        /*
         if (isPlayerNear && dialogueTextBox.text != string.Empty)
         {
             interactTextBox.text = dialogueControls;
         }
+        */
     }
 
     private IEnumerator Write(string sentence, TextMeshProUGUI textBox)

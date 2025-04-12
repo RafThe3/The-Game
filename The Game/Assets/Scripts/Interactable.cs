@@ -47,10 +47,16 @@ public class Interactable : MonoBehaviour
 
         if (isPlayerNear && Input.GetKeyDown(interactButton) && giveObjective)
         {
-            StartCoroutine(Write($"Objective: {objective}", objectiveTextBox));
-            npc.ChangeDialogue(dialogue);
-            isInteractable = false;
+            Interact();
         }
+    }
+
+    public void Interact()
+    {
+        StartCoroutine(Write($"Objective: {objective}", objectiveTextBox));
+        npc.ChangeDialogue(dialogue);
+        npc.EnableDialogue();
+        isInteractable = false;
     }
 
     private IEnumerator Write(string sentence, TextMeshProUGUI textBox)
