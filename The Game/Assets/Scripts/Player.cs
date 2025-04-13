@@ -22,20 +22,15 @@ public class Player : MonoBehaviour
     [SerializeField] private Slider staminaBar;
     [SerializeField] private Image staminaBarFillArea;
     [SerializeField] private Animator staminaAnimator;
-    [SerializeField] private TextMeshProUGUI coordinatesText, interactTextBox, collectiblesTextBox;
-    [SerializeField] private float raycastHitDistance = 1;
+    [SerializeField] private TextMeshProUGUI coordinatesText;
+
+    [SerializeField] private PlayerInteract playerInteract;
 
     private FirstPersonController controller;
     private CharacterController character;
     private bool isMoving;
     private bool isOnSprintCooldown;
-    private readonly string interactText = "Press [e] to interact";
-    private readonly string collectText = "Press [e] to collect";
-    private readonly string dialogueControls = "Press [g] to continue";
-    private float collectiblesCount = 0;
-    private GameObject[] collectibles;
     private Canvas pauseMenu;
-    private readonly KeyCode interactButton = KeyCode.E;
 
     private void Awake()
     {
@@ -48,9 +43,10 @@ public class Player : MonoBehaviour
     {
         staminaBar.maxValue = sprintDuration;
         staminaBar.value = sprintDuration;
-        interactTextBox.enabled = false;
-        collectiblesTextBox.enabled = false;
-        collectibles = GameObject.FindGameObjectsWithTag("Collectible");
+
+        playerInteract.interactTextBox.enabled = false;
+        playerInteract.collectiblesTextBox.enabled = false;
+        playerInteract.collectibles = GameObject.FindGameObjectsWithTag("Collectible");
     }
 
     private void Update()
@@ -66,19 +62,21 @@ public class Player : MonoBehaviour
         }
     }
 
+    #region Player Interact
+
     private void ToggleInteract()
     {
         DetermineObject(out bool isInteractable, out bool isCollectible, out bool isNPC, out RaycastHit hit);
 
-        interactTextBox.enabled = isInteractable || isNPC || isCollectible;
+        playerInteract.interactTextBox.enabled = isInteractable || isNPC || isCollectible;
 
         if (isNPC)
         {
             Dialogue npc = hit.collider.GetComponent<Dialogue>();
-            interactTextBox.text = npc.HasInteracted ? dialogueControls : interactText;
+            playerInteract.interactTextBox.text = npc.HasInteracted ? playerInteract.dialogueControls : playerInteract.interactText;
             if (npc.HasInteracted)
             {
-                interactTextBox.text = npc.IsTalking ? "" : dialogueControls;
+                playerInteract.interactTextBox.text = npc.IsTalking ? "" : playerInteract.dialogueControls;
             }
 
             TriggerDialogue(npc);
@@ -86,8 +84,8 @@ public class Player : MonoBehaviour
 
         if (isCollectible)
         {
-            interactTextBox.text = collectText;
-            if (Input.GetKeyDown(interactButton))
+            playerInteract.interactTextBox.text = playerInteract.collectText;
+            if (Input.GetKeyDown(playerInteract.interactButton))
             {
                 StopAllCoroutines();
                 StartCoroutine(CollectItem(hit));
@@ -97,7 +95,7 @@ public class Player : MonoBehaviour
 
         if (isInteractable)
         {
-            interactTextBox.text = interactText;
+            playerInteract.interactTextBox.text = playerInteract.interactText;
         }
 
         Debug.Log($"is npc: {isNPC}, {isInteractable}, {isCollectible}");
@@ -110,7 +108,7 @@ public class Player : MonoBehaviour
         isNPC = false;
         Ray ray = new(Camera.main.transform.position, Camera.main.transform.forward);
 
-        if (Physics.Raycast(ray, out hit, raycastHitDistance))
+        if (Physics.Raycast(ray, out hit, playerInteract.raycastHitDistance))
         {
             isInteractable = hit.collider.CompareTag("Interactable");
             isNPC = hit.collider.CompareTag("NPC");
@@ -120,19 +118,20 @@ public class Player : MonoBehaviour
 
     private IEnumerator CollectItem(RaycastHit collectible)
     {
-        collectiblesCount++;
+        Camera.main.GetComponent<AudioSource>().PlayOneShot(playerInteract.collectibleSFX);
+        playerInteract.collectiblesCount++;
         Destroy(collectible.collider.gameObject);
-        collectiblesTextBox.text = $"{collectible.collider.name} collected: \n{collectiblesCount} / {collectibles.Length}";
-        collectiblesTextBox.enabled = true;
+        playerInteract.collectiblesTextBox.text = $"{collectible.collider.name} collected: \n{playerInteract.collectiblesCount} / {playerInteract.collectibles.Length}";
+        playerInteract.collectiblesTextBox.enabled = true;
 
         yield return new WaitForSeconds(7.5f);
 
-        collectiblesTextBox.enabled = false;
+        playerInteract.collectiblesTextBox.enabled = false;
     }
 
     private void TriggerDialogue(Dialogue npc)
     {
-        if (!npc.HasInteracted && Input.GetKeyDown(interactButton))
+        if (!npc.HasInteracted && Input.GetKeyDown(playerInteract.interactButton))
         {
             npc.StartDialogue();
         }
@@ -142,6 +141,8 @@ public class Player : MonoBehaviour
             npc.DisplayNextDialogue();
         }
     }
+
+    #endregion
 
     private void UpdateCoordinates()
     {
@@ -182,5 +183,18 @@ public class Player : MonoBehaviour
         {
             staminaAnimator.SetBool("isSprinting", false);
         }
+    }
+
+    [System.Serializable]
+    public class PlayerInteract
+    {
+        public TextMeshProUGUI interactTextBox, collectiblesTextBox;
+        public readonly string interactText = "Press [e] to interact", collectText = "Press [e] to collect", 
+                                dialogueControls = "Press [g] to continue";
+        public readonly KeyCode interactButton = KeyCode.E;
+        [HideInInspector] public GameObject[] collectibles;
+        [HideInInspector] public float collectiblesCount = 0;
+        public AudioClip collectibleSFX;
+        public float raycastHitDistance = 1;
     }
 }

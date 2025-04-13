@@ -29,7 +29,7 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private bool disableDialogue = false;
 
     private Queue<string> dialogueQueue;
-    private GameObject player;
+    private Transform player;
     private bool isTalking = false;
     private bool hasInteracted = false;
     private readonly string dialogueControls = "Press [g] to continue";
@@ -37,7 +37,7 @@ public class Dialogue : MonoBehaviour
     private void Start()
     {
         dialogueQueue = new();
-        player = GameObject.FindWithTag("Player");
+        player = GameObject.FindWithTag("Player").transform;
         dialogueTextBox.text = string.Empty;
         nameTextBox.text = string.Empty;
     }
@@ -51,7 +51,7 @@ public class Dialogue : MonoBehaviour
             return;
         }
 
-        Vector3 playerPosition = player.transform.position - transform.position;
+        Vector3 playerPosition = player.position - transform.position;
         bool isPlayerNear = playerPosition.magnitude < interactionDistance;
 
         dialogueTextBox.enabled = isPlayerNear;
