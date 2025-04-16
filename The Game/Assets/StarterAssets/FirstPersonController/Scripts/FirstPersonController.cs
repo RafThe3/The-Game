@@ -61,8 +61,8 @@ namespace StarterAssets
 		private float _terminalVelocity = 53.0f;
 		private float _tempRotationSpeed;
 		private float _tempMoveSpeed;
-		public float _tempSprintSpeed;
-		public bool _isSprinting;
+		[HideInInspector] public float _tempSprintSpeed;
+		[HideInInspector] public bool _isSprinting;
 
 		// timeout deltatime
 		private float _jumpTimeoutDelta;

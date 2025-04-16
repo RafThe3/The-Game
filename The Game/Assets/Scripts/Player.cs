@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     [SerializeField] private TextMeshProUGUI coordinatesText;
 
     [SerializeField] private PlayerInteract playerInteract;
+    //[SerializeField] private GameObject projectile;
 
     private FirstPersonController controller;
     private CharacterController character;
@@ -53,6 +54,15 @@ public class Player : MonoBehaviour
     {
         UpdateCoordinates();
         ToggleInteract();
+
+        /*
+        if (Input.GetButton("Fire1"))
+        {
+            GameObject projectileClone = Instantiate(projectile, transform.position, Quaternion.identity);
+            projectileClone.transform.Translate(10 * Time.deltaTime * Vector3.forward);
+            Destroy(projectileClone, 5);
+        }
+        */
 
         isMoving = Mathf.Abs(character.velocity.x) > Mathf.Epsilon;
 
@@ -95,7 +105,12 @@ public class Player : MonoBehaviour
 
         if (isInteractable)
         {
+            Interactable interactable = hit.collider.GetComponent<Interactable>();
             playerInteract.interactTextBox.text = playerInteract.interactText;
+            if (Input.GetKeyDown(playerInteract.interactButton))
+            {
+                interactable.Interact();
+            }
         }
 
         Debug.Log($"is npc: {isNPC}, {isInteractable}, {isCollectible}");

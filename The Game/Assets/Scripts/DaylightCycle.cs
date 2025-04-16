@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class DaylightCycle : MonoBehaviour
 {
-    private const float defaultSpeed = 0.001f;
     [Min(0), SerializeField] private float speed = 1;
+
+    private const float defaultSpeed = 0.001f;
+    private Light light;
+
+    private void Awake()
+    {
+        light = GetComponent<Light>();
+    }
 
     private void Start()
     {
@@ -19,9 +26,6 @@ public class DaylightCycle : MonoBehaviour
 
     private void CycleDay()
     {
-        if (Time.timeScale == 1)
-        {
-            transform.Rotate(new Vector3(defaultSpeed * speed, 0, 0));
-        }
+        transform.Rotate(new Vector3(defaultSpeed * speed, 0, 0));
     }
 }

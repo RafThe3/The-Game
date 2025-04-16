@@ -7,6 +7,7 @@ using UnityEditor.ShaderGraph.Internal;
 using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEngine.AI;
 
 public class Dialogue : MonoBehaviour
 {
@@ -28,16 +29,22 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private Dialogue[] npcs;
     [SerializeField] private bool disableDialogue = false;
 
+    private NavMeshAgent agent;
     private Queue<string> dialogueQueue;
     private Transform player;
     private bool isTalking = false;
     private bool hasInteracted = false;
     private readonly string dialogueControls = "Press [g] to continue";
 
+    private void Awake()
+    {
+        player = GameObject.FindWithTag("Player").transform;
+        agent = GetComponent<NavMeshAgent>();
+    }
+
     private void Start()
     {
         dialogueQueue = new();
-        player = GameObject.FindWithTag("Player").transform;
         dialogueTextBox.text = string.Empty;
         nameTextBox.text = string.Empty;
     }
