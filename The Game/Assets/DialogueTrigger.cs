@@ -5,15 +5,15 @@ public class DialogueTrigger : MonoBehaviour
 {
     [SerializeField] private bool enableDialogue = true;
     [SerializeField] private bool enableTrigger = false;
-    [SerializeField] private bool endlessDialogue = false;
+    //[SerializeField] private bool endlessDialogue = true;
     [SerializeField] private bool giveObjective = false;
     [TextArea(3, 5), SerializeField] private string[] dialogue;
     [TextArea(3, 5), SerializeField] private string objective;
 
     private GameObject barrier;
     private Dialogue dialogueManager;
-    public bool HasInteracted = false;
-    public bool IsTalking = false;
+    private bool hasInteracted = false;
+    private bool isTalking = false;
 
     private void Awake()
     {
@@ -25,16 +25,13 @@ public class DialogueTrigger : MonoBehaviour
     {
         tag = enableDialogue ? "NPC" : "Untagged";
 
-        if (!enableDialogue)
-        {
-            return;
-        }
+        if (!enableDialogue) return;
 
         if (!CompareTag("Player"))
         {
-            HasInteracted = dialogueManager.HasInteracted;
-            IsTalking = dialogueManager.IsTalking;
-            barrier.SetActive(HasInteracted);
+            hasInteracted = dialogueManager.HasInteracted;
+            isTalking = dialogueManager.IsTalking;
+            barrier.SetActive(hasInteracted);
         }
     }
 
@@ -45,7 +42,11 @@ public class DialogueTrigger : MonoBehaviour
         dialogueManager.SetName(name);
         dialogueManager.StartDialogue();
         dialogueManager.TriggerObjective(giveObjective);
-        if (giveObjective) dialogueManager.SetObjective(objective);
+        if (giveObjective)
+        {
+            dialogueManager.SetObjective(objective);
+            objective = string.Empty;
+        }
     }
 
     public void DisplayNextDialogue()
@@ -57,4 +58,10 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (!enableTrigger) return;
     }
+    
+    public bool HasInteracted => hasInteracted;
+
+    public bool IsTalking => isTalking;
+
+    //public bool EndlessDialogue => endlessDialogue;
 }

@@ -54,19 +54,13 @@ public class Player : MonoBehaviour
     {
         isMoving = Mathf.Abs(character.velocity.x) > Mathf.Epsilon;
 
-        if (!infiniteStamina)
-        {
-            Sprint();
-        }
+        if (!infiniteStamina) Sprint();
 
         SetPlayerValues();
 
         playerInteract.interactTextBox.enabled = !pauseMenu.enabled;
 
-        if (pauseMenu.enabled)
-        {
-            return;
-        }
+        if (pauseMenu.enabled) return;
 
         UpdateCoordinates();
         ToggleInteract();
@@ -112,10 +106,7 @@ public class Player : MonoBehaviour
         {
             Interactable interactable = hit.collider.GetComponent<Interactable>();
             playerInteract.interactTextBox.text = playerInteract.interactText;
-            if (Input.GetKeyDown(playerInteract.interactButton))
-            {
-                interactable.Interact();
-            }
+            if (Input.GetKeyDown(playerInteract.interactButton)) interactable.Interact();
         }
 
         Debug.Log($"is npc: {isNPC}, {isInteractable}, {isCollectible}");
@@ -175,8 +166,6 @@ public class Player : MonoBehaviour
 
     private void Sprint()
     {
-
-
         if (pauseMenu.enabled)
         {
             controller.MoveSpeed = 0;

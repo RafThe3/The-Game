@@ -35,7 +35,6 @@ public class Dialogue : MonoBehaviour
     private Queue<string> dialogueQueue;
     private bool isTalking = false;
     private bool hasInteracted = false;
-    private readonly string dialogueControls = "Press [g] to continue";
 
     private void Start()
     {
@@ -49,18 +48,12 @@ public class Dialogue : MonoBehaviour
         isTalking = true;
 
         textBox.text = string.Empty;
-        if (textBox == dialogueTextBox)
-        {
-            nameTextBox.text = objectName;
-        }
+        if (textBox == dialogueTextBox) nameTextBox.text = objectName;
 
         foreach (char c in sentence.ToCharArray())
         {
             textBox.text += c;
-            if (c.ToString() != " ")
-            {
-                Camera.main.GetComponent<AudioSource>().PlayOneShot(dialogueSFX);
-            }
+            if (c.ToString() != " ") Camera.main.GetComponent<AudioSource>().PlayOneShot(dialogueSFX);
             yield return new WaitForSeconds(0.1f / dialogueSpeed);
         }
 
@@ -75,10 +68,7 @@ public class Dialogue : MonoBehaviour
 
         dialogueQueue.Clear();
 
-        foreach (string sentence in dialogue)
-        {
-            dialogueQueue.Enqueue(sentence);
-        }
+        foreach (string sentence in dialogue) dialogueQueue.Enqueue(sentence);
 
         DisplayNextDialogue();
     }
@@ -93,6 +83,7 @@ public class Dialogue : MonoBehaviour
                 StartCoroutine(Write($"Objective: {objective}", objectiveTextBox));
                 objective = string.Empty;
             }
+            #region Triggers
             /*
             if (triggerDialogue)
             {
@@ -103,6 +94,7 @@ public class Dialogue : MonoBehaviour
                 TriggerInteractable();
             }
             */
+            #endregion
             hasInteracted = false;
             return;
         }

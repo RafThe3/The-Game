@@ -1449,7 +1449,6 @@ MonoBehaviour:
   nameTextBox: {fileID: 734243633}
   dialogueSpeed: 2
   dialogueSFX: {fileID: 8300000, guid: 1dc2f2287b118ff45939a91b08a2244e, type: 3}
-  barrier: {fileID: 0}
   triggerInteractable: 0
   interactables:
   - {fileID: 1432141007}
@@ -2024,7 +2023,6 @@ MonoBehaviour:
   nameTextBox: {fileID: 734243633}
   dialogueSpeed: 2
   dialogueSFX: {fileID: 8300000, guid: 1dc2f2287b118ff45939a91b08a2244e, type: 3}
-  barrier: {fileID: 0}
   triggerInteractable: 0
   interactables: []
   triggerDialogue: 1
@@ -3279,17 +3277,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableDialogue: 1
   enableTrigger: 0
-  endlessDialogue: 0
   giveObjective: 1
   dialogue:
   - bruh
   - are you stupid
   - keemstar is a bald retard
   objective: suck my cog
-  interactionDistance: 3
-  barrier: {fileID: 0}
-  HasInteracted: 0
-  IsTalking: 0
 --- !u!1 &436733651
 GameObject:
   m_ObjectHideFlags: 0
@@ -4387,7 +4380,6 @@ MonoBehaviour:
   nameTextBox: {fileID: 734243633}
   dialogueSpeed: 2.3
   dialogueSFX: {fileID: 8300000, guid: 1dc2f2287b118ff45939a91b08a2244e, type: 3}
-  barrier: {fileID: 0}
   triggerInteractable: 0
   interactables: []
   triggerDialogue: 0
@@ -5875,14 +5867,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableDialogue: 1
   enableTrigger: 0
-  endlessDialogue: 0
   giveObjective: 0
   dialogue: []
   objective: 
-  interactionDistance: 1
-  barrier: {fileID: 0}
-  HasInteracted: 0
-  IsTalking: 0
 --- !u!1 &865383470
 GameObject:
   m_ObjectHideFlags: 0
@@ -6712,7 +6699,6 @@ MonoBehaviour:
   nameTextBox: {fileID: 734243633}
   dialogueSpeed: 2
   dialogueSFX: {fileID: 8300000, guid: 1dc2f2287b118ff45939a91b08a2244e, type: 3}
-  barrier: {fileID: 0}
   triggerInteractable: 1
   interactables:
   - {fileID: 1432141007}
@@ -11296,17 +11282,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableDialogue: 1
   enableTrigger: 0
-  endlessDialogue: 0
   giveObjective: 1
   dialogue:
-  - bruh
-  - are you stupid
+  - no way bros dihhh is 2 mm long
+  - lmfaoooooo
   - keemstar is a bald retard
-  objective: suck my cog
-  interactionDistance: 3
-  barrier: {fileID: 0}
-  HasInteracted: 0
-  IsTalking: 0
+  objective: suck a bald person's head
 --- !u!65 &1609614657
 BoxCollider:
   m_ObjectHideFlags: 0
