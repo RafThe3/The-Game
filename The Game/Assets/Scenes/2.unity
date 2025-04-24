@@ -5611,8 +5611,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7938e92edc310244e94a2bff5c33eb64, type: 3}
-  m_Resource: {fileID: 8300000, guid: 7938e92edc310244e94a2bff5c33eb64, type: 3}
+  m_audioClip: {fileID: 8300000, guid: acdc6c29c74737c4bb8b60ef173576f5, type: 3}
+  m_Resource: {fileID: 8300000, guid: acdc6c29c74737c4bb8b60ef173576f5, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -5853,6 +5853,16 @@ MonoBehaviour:
     collectiblesCount: 0
     collectibleSFX: {fileID: 8300000, guid: 632b1c41f6a368540970d173af4f782f, type: 3}
     raycastHitDistance: 2.3
+  walkSFX:
+  - {fileID: 8300000, guid: b993df4a93c1d304ab19d8b2eb88c9a5, type: 3}
+  - {fileID: 8300000, guid: 5c9bdbce37b06a24fa6ea793bcfd1907, type: 3}
+  - {fileID: 8300000, guid: 0909de896e9029541b92ae05fe15e4b6, type: 3}
+  - {fileID: 8300000, guid: 6ad0cf00f050bee41a2dee098475dc78, type: 3}
+  - {fileID: 8300000, guid: 7ca5a9710db4327439c9f8cb8204615e, type: 3}
+  - {fileID: 8300000, guid: 14ae706fef2303e4cb71112dbd5d250b, type: 3}
+  - {fileID: 8300000, guid: b995bc1775ea83b4b8f861763e9a1424, type: 3}
+  - {fileID: 8300000, guid: d15f7338d693f0343843a6b9096d27f6, type: 3}
+  audioSpeed: 1
 --- !u!114 &837942988
 MonoBehaviour:
   m_ObjectHideFlags: 0

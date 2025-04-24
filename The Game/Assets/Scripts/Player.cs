@@ -27,6 +27,13 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerInteract playerInteract;
     //[SerializeField] private GameObject projectile;
 
+    [SerializeField] private AudioClip[] walkSFX;
+    [Min(1), SerializeField] private float audioSpeed = 1;
+
+    private float audioLength = 0;
+    private int audioNum = 0;
+    private float tempAudioSpeed = 0;
+
     private FirstPersonController controller;
     private CharacterController character;
     private bool isMoving;
@@ -48,17 +55,19 @@ public class Player : MonoBehaviour
         playerInteract.interactTextBox.enabled = false;
         playerInteract.collectiblesTextBox.enabled = false;
         playerInteract.collectibles = GameObject.FindGameObjectsWithTag("Collectible");
+        tempAudioSpeed = audioSpeed;
     }
 
     private void Update()
     {
-        isMoving = Mathf.Abs(character.velocity.x) > Mathf.Epsilon;
+        isMoving = Mathf.Abs(character.velocity.x) > Mathf.Epsilon && Mathf.Abs(character.velocity.z) > Mathf.Epsilon;
 
         if (!infiniteStamina) Sprint();
 
-        SetPlayerValues();
+        controller.ChangeRotationSpeed(pauseMenu.enabled);
 
         playerInteract.interactTextBox.enabled = !pauseMenu.enabled;
+        PlaySFX();
 
         if (pauseMenu.enabled) return;
 
@@ -66,9 +75,25 @@ public class Player : MonoBehaviour
         ToggleInteract();
     }
 
-    private void SetPlayerValues()
+    private void PlaySFX()
     {
-        controller.ChangeRotationSpeed(pauseMenu.enabled);
+        audioLength += Time.deltaTime;
+
+        if (isMoving && audioLength >= walkSFX[audioNum].length * (1 / audioSpeed) && character.isGrounded)
+        {
+            if (audioNum < walkSFX.Length - 1)
+            {
+                audioNum++;
+            }
+            else
+            {
+                audioNum = 0;
+            }
+            audioSpeed = controller._isSprinting ? tempAudioSpeed * 1.5f : tempAudioSpeed;
+            Camera.main.GetComponent<AudioSource>().PlayOneShot(walkSFX[audioNum], 1);
+            audioLength = 0;
+            Debug.Log(audioNum);
+        }
     }
 
     #region Player Interact
