@@ -8,17 +8,17 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine.AI;
-
+using System.Net;
+using TreeEditor;
 public class Dialogue : MonoBehaviour
 {
-    [Header("NPC")]
-    [SerializeField] private bool enableDialogue = true;
-    [SerializeField] private bool giveObjective = false;
-    [TextArea(3, 5), SerializeField] private string[] dialogue = null;
-    [TextArea(3, 5), SerializeField] private string objective = string.Empty;
-    [SerializeField] private TextMeshProUGUI interactTextBox, objectiveTextBox;
-    public TextMeshProUGUI dialogueTextBox, nameTextBox;
-    [SerializeField] private float interactionDistance = 1;
+    [Header("UI")]
+    [SerializeField] private TextMeshProUGUI interactTextBox;
+    [SerializeField] private TextMeshProUGUI objectiveTextBox;
+    [SerializeField] private TextMeshProUGUI dialogueTextBox;
+    [SerializeField] private TextMeshProUGUI nameTextBox;
+
+    [Header("Dialogue")]
     [SerializeField] private float dialogueSpeed = 1;
     [SerializeField] private AudioClip dialogueSFX;
 
@@ -27,51 +27,21 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private Interactable[] interactables;
     [SerializeField] private bool triggerDialogue = false;
     [SerializeField] private Dialogue[] npcs;
-    [SerializeField] private bool disableDialogue = false;
 
-    private NavMeshAgent agent;
+    private string[] dialogue;
+    private string objectName;
+    private bool giveObjective = false;
+    private string objective = string.Empty;
     private Queue<string> dialogueQueue;
-    private Transform player;
     private bool isTalking = false;
     private bool hasInteracted = false;
     private readonly string dialogueControls = "Press [g] to continue";
-
-    private void Awake()
-    {
-        player = GameObject.FindWithTag("Player").transform;
-        agent = GetComponent<NavMeshAgent>();
-    }
 
     private void Start()
     {
         dialogueQueue = new();
         dialogueTextBox.text = string.Empty;
         nameTextBox.text = string.Empty;
-    }
-
-    private void Update()
-    {
-        tag = enableDialogue ? "NPC" : "Untagged";
-
-        if (!enableDialogue)
-        {
-            return;
-        }
-
-        Vector3 playerPosition = player.position - transform.position;
-        bool isPlayerNear = playerPosition.magnitude < interactionDistance;
-
-        dialogueTextBox.enabled = isPlayerNear;
-        nameTextBox.enabled = isPlayerNear;
-
-        Debug.Log(isPlayerNear);
-
-        /*
-        if (isPlayerNear && dialogueTextBox.text != string.Empty)
-        {
-            interactTextBox.text = dialogueControls;
-        }
-        */
     }
 
     private IEnumerator Write(string sentence, TextMeshProUGUI textBox)
@@ -81,7 +51,7 @@ public class Dialogue : MonoBehaviour
         textBox.text = string.Empty;
         if (textBox == dialogueTextBox)
         {
-            nameTextBox.text = name;
+            nameTextBox.text = objectName;
         }
 
         foreach (char c in sentence.ToCharArray())
@@ -123,6 +93,7 @@ public class Dialogue : MonoBehaviour
                 StartCoroutine(Write($"Objective: {objective}", objectiveTextBox));
                 objective = string.Empty;
             }
+            /*
             if (triggerDialogue)
             {
                 TriggerDialogue();
@@ -131,6 +102,7 @@ public class Dialogue : MonoBehaviour
             {
                 TriggerInteractable();
             }
+            */
             hasInteracted = false;
             return;
         }
@@ -145,18 +117,10 @@ public class Dialogue : MonoBehaviour
         dialogueTextBox.text = string.Empty;
         nameTextBox.text = string.Empty;
         interactTextBox.text = string.Empty;
-        if (disableDialogue)
-        {
-            enableDialogue = false;
-        }
         Debug.Log("End of conversation");
     }
 
-    public void ChangeDialogue(string[] dialogue)
-    {
-        this.dialogue = dialogue;
-    }
-
+    /*
     private void TriggerDialogue()
     {
         foreach (Dialogue n in npcs)
@@ -172,17 +136,24 @@ public class Dialogue : MonoBehaviour
             i.EnableInteract();
         }
     }
-
-    public void EnableDialogue() => enableDialogue = true;
-
-    public bool DialogueEnabled => enableDialogue;
+    */
 
     public bool IsTalking => isTalking;
 
     public bool HasInteracted => hasInteracted;
+    public void TriggerObjective(bool shouldTrigger) => giveObjective = shouldTrigger;
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, interactionDistance);
-    }
+    public void TriggerDialogue(bool shouldTrigger) => triggerDialogue = shouldTrigger;
+
+    public void ToggleInteractBox(bool enable) => interactTextBox.enabled = enable;
+
+    public void ToggleDialogueBox(bool enable) => interactTextBox.enabled = enable;
+
+    public void ToggleNameBox(bool enable) => interactTextBox.enabled = enable;
+
+    public void SetDialogue(string[] dialogue) => this.dialogue = dialogue;
+
+    public void SetName(string name) => objectName = name;
+
+    public void SetObjective(string objective) => this.objective = objective;
 }

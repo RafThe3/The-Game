@@ -13,8 +13,6 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private AudioClip pauseMenuSFX;
 
-    private FirstPersonController controller;
-
     public bool AutoLockCursor { get; set; } = true;
 
     private AudioSource audioSource;
@@ -25,8 +23,6 @@ public class PauseMenu : MonoBehaviour
         {
             audioSource = Camera.main.GetComponent<AudioSource>();
         }
-
-        controller = FindFirstObjectByType<FirstPersonController>();
     }
 
     private void Start()
@@ -55,8 +51,6 @@ public class PauseMenu : MonoBehaviour
         pauseMenu.enabled = !pauseMenu.enabled;
         //Time.timeScale = Time.timeScale == 1 ? 0 : 1;
         //Cursor.lockState = Time.timeScale == 1 ? CursorLockMode.Locked : CursorLockMode.None;
-        controller.ChangeRotationSpeed(true);
-        controller.ChangeMoveSpeed(true);
         Camera.main.GetComponent<AudioSource>().PlayOneShot(pauseMenuSFX);
         if (muteMusic)
         {
@@ -90,8 +84,6 @@ public class PauseMenu : MonoBehaviour
         pauseMenu.enabled = false;
         //Time.timeScale = 1;
         //Cursor.lockState = CursorLockMode.Locked;
-        controller.ChangeRotationSpeed(false);
-        controller.ChangeMoveSpeed(false);
         if (muteMusic)
         {
             audioSource.Stop();

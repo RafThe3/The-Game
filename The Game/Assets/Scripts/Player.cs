@@ -52,24 +52,29 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        UpdateCoordinates();
-        ToggleInteract();
-
-        /*
-        if (Input.GetButton("Fire1"))
-        {
-            GameObject projectileClone = Instantiate(projectile, transform.position, Quaternion.identity);
-            projectileClone.transform.Translate(10 * Time.deltaTime * Vector3.forward);
-            Destroy(projectileClone, 5);
-        }
-        */
-
         isMoving = Mathf.Abs(character.velocity.x) > Mathf.Epsilon;
 
         if (!infiniteStamina)
         {
             Sprint();
         }
+
+        SetPlayerValues();
+
+        playerInteract.interactTextBox.enabled = !pauseMenu.enabled;
+
+        if (pauseMenu.enabled)
+        {
+            return;
+        }
+
+        UpdateCoordinates();
+        ToggleInteract();
+    }
+
+    private void SetPlayerValues()
+    {
+        controller.ChangeRotationSpeed(pauseMenu.enabled);
     }
 
     #region Player Interact
@@ -82,11 +87,11 @@ public class Player : MonoBehaviour
 
         if (isNPC)
         {
-            Dialogue npc = hit.collider.GetComponent<Dialogue>();
+            DialogueTrigger npc = hit.collider.GetComponent<DialogueTrigger>();
             playerInteract.interactTextBox.text = npc.HasInteracted ? playerInteract.dialogueControls : playerInteract.interactText;
             if (npc.HasInteracted)
             {
-                playerInteract.interactTextBox.text = npc.IsTalking ? "" : playerInteract.dialogueControls;
+                playerInteract.interactTextBox.text = npc.IsTalking ? string.Empty : playerInteract.dialogueControls;
             }
 
             TriggerDialogue(npc);
@@ -144,16 +149,16 @@ public class Player : MonoBehaviour
         playerInteract.collectiblesTextBox.enabled = false;
     }
 
-    private void TriggerDialogue(Dialogue npc)
+    private void TriggerDialogue(DialogueTrigger character)
     {
-        if (!npc.HasInteracted && Input.GetKeyDown(playerInteract.interactButton))
+        if (!character.HasInteracted && Input.GetKeyDown(playerInteract.interactButton))
         {
-            npc.StartDialogue();
+            character.StartDialogue();
         }
 
-        if (!npc.IsTalking && Input.GetKeyDown(KeyCode.G) && !pauseMenu.enabled)
+        if (!character.IsTalking && character.HasInteracted && Input.GetKeyDown(KeyCode.G))
         {
-            npc.DisplayNextDialogue();
+            character.DisplayNextDialogue();
         }
     }
 
@@ -170,6 +175,20 @@ public class Player : MonoBehaviour
 
     private void Sprint()
     {
+
+
+        if (pauseMenu.enabled)
+        {
+            controller.MoveSpeed = 0;
+            controller.SprintSpeed = 0;
+            return;
+        }
+        else
+        {
+            controller.MoveSpeed = controller._tempMoveSpeed;
+            if (!isOnSprintCooldown) controller.SprintSpeed = controller._tempSprintSpeed;
+        }
+
         if (staminaBar.value <= 0)
         {
             isOnSprintCooldown = true;

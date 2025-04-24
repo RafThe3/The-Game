@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor.ShaderGraph.Internal;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -59,8 +60,8 @@ namespace StarterAssets
 		private float _rotationVelocity;
 		private float _verticalVelocity;
 		private float _terminalVelocity = 53.0f;
-		private float _tempRotationSpeed;
-		private float _tempMoveSpeed;
+		[HideInInspector] public float _tempRotationSpeed;
+		[HideInInspector] public float _tempMoveSpeed;
 		[HideInInspector] public float _tempSprintSpeed;
 		[HideInInspector] public bool _isSprinting;
 
@@ -274,14 +275,10 @@ namespace StarterAssets
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 		}
 
-		public void ChangeRotationSpeed(bool change)
-		{
-			RotationSpeed = !change ? _tempRotationSpeed : 0;
-		}
+        public void ChangeRotationSpeed(bool change) => RotationSpeed = change ? 0 : _tempRotationSpeed;
 
-        public void ChangeMoveSpeed(bool change)
-		{
-			MoveSpeed = !change ? _tempMoveSpeed : 0;
-		}
+        public void ChangeMoveSpeed(bool change) => MoveSpeed = change ? 0 : _tempMoveSpeed;
+
+		public void ChangeSprintSpeed(bool change) => SprintSpeed = change ? 0 : _tempSprintSpeed;
     }
 }

@@ -13,7 +13,7 @@ public class Interactable : MonoBehaviour
     [SerializeField] private float objectiveTextSpeed = 1;
     [SerializeField] private AudioClip objectiveTextSFX;
     [SerializeField] private float interactionDistance = 1;
-    [SerializeField] private bool destroyObjectOnInteract = false;
+    [SerializeField] private bool destroyOnInteract = false;
 
     [Header("NPCs")]
     [SerializeField] private Dialogue npc;
@@ -54,11 +54,16 @@ public class Interactable : MonoBehaviour
 
     public void Interact()
     {
-        StartCoroutine(Write($"Objective: {objective}", objectiveTextBox));
-        npc.ChangeDialogue(dialogue);
-        npc.EnableDialogue();
+        if (objective != string.Empty)
+        {
+            StartCoroutine(Write($"Objective: {objective}", objectiveTextBox));
+        }
+        npc.SetDialogue(dialogue);
+        //npc.EnableDialogue();
+        npc.TriggerDialogue(false);
         isInteractable = false;
-        if (destroyObjectOnInteract)
+        objective = string.Empty;
+        if (destroyOnInteract)
         {
             Destroy(gameObject);
         }
