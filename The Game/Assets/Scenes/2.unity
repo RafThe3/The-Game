@@ -1449,11 +1449,6 @@ MonoBehaviour:
   nameTextBox: {fileID: 734243633}
   dialogueSpeed: 2
   dialogueSFX: {fileID: 8300000, guid: 1dc2f2287b118ff45939a91b08a2244e, type: 3}
-  triggerInteractable: 0
-  interactables:
-  - {fileID: 1432141007}
-  triggerDialogue: 0
-  npcs: []
 --- !u!65 &159707480
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2023,11 +2018,6 @@ MonoBehaviour:
   nameTextBox: {fileID: 734243633}
   dialogueSpeed: 2
   dialogueSFX: {fileID: 8300000, guid: 1dc2f2287b118ff45939a91b08a2244e, type: 3}
-  triggerInteractable: 0
-  interactables: []
-  triggerDialogue: 1
-  npcs:
-  - {fileID: 1002474868}
 --- !u!54 &218454259
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3276,13 +3266,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableDialogue: 1
-  enableTrigger: 0
   giveObjective: 1
   dialogue:
   - bruh
   - are you stupid
   - keemstar is a bald retard
-  objective: suck my cog
+  - they never knew this
+  objective: find an exit
 --- !u!1 &436733651
 GameObject:
   m_ObjectHideFlags: 0
@@ -4380,10 +4370,6 @@ MonoBehaviour:
   nameTextBox: {fileID: 734243633}
   dialogueSpeed: 2.3
   dialogueSFX: {fileID: 8300000, guid: 1dc2f2287b118ff45939a91b08a2244e, type: 3}
-  triggerInteractable: 0
-  interactables: []
-  triggerDialogue: 0
-  npcs: []
 --- !u!4 &602803684
 Transform:
   m_ObjectHideFlags: 0
@@ -5611,8 +5597,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: acdc6c29c74737c4bb8b60ef173576f5, type: 3}
-  m_Resource: {fileID: 8300000, guid: acdc6c29c74737c4bb8b60ef173576f5, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 880326a59846a4e0694215a1ed462c7e, type: 3}
+  m_Resource: {fileID: 8300000, guid: 880326a59846a4e0694215a1ed462c7e, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -5876,7 +5862,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableDialogue: 1
-  enableTrigger: 0
   giveObjective: 0
   dialogue: []
   objective: 
@@ -6709,11 +6694,6 @@ MonoBehaviour:
   nameTextBox: {fileID: 734243633}
   dialogueSpeed: 2
   dialogueSFX: {fileID: 8300000, guid: 1dc2f2287b118ff45939a91b08a2244e, type: 3}
-  triggerInteractable: 1
-  interactables:
-  - {fileID: 1432141007}
-  triggerDialogue: 0
-  npcs: []
 --- !u!65 &1002474869
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11291,7 +11271,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableDialogue: 1
-  enableTrigger: 0
   giveObjective: 1
   dialogue:
   - no way bros dihhh is 2 mm long

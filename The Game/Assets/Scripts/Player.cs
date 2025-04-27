@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        isMoving = Mathf.Abs(character.velocity.x) > Mathf.Epsilon && Mathf.Abs(character.velocity.z) > Mathf.Epsilon;
+        isMoving = Mathf.Abs(character.velocity.x) > Mathf.Epsilon || Mathf.Abs(character.velocity.z) > Mathf.Epsilon;
 
         if (!infiniteStamina) Sprint();
 
@@ -89,10 +89,9 @@ public class Player : MonoBehaviour
             {
                 audioNum = 0;
             }
-            audioSpeed = controller._isSprinting ? tempAudioSpeed * 1.5f : tempAudioSpeed;
+            audioSpeed = controller._isSprinting && !isOnSprintCooldown ? tempAudioSpeed * 1.5f : tempAudioSpeed;
             Camera.main.GetComponent<AudioSource>().PlayOneShot(walkSFX[audioNum], 1);
             audioLength = 0;
-            Debug.Log(audioNum);
         }
     }
 

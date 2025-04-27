@@ -4,7 +4,7 @@ using UnityEngine;
 public class DialogueTrigger : MonoBehaviour
 {
     [SerializeField] private bool enableDialogue = true;
-    [SerializeField] private bool enableTrigger = false;
+    //[SerializeField] private bool enableTrigger = false;
     //[SerializeField] private bool endlessDialogue = true;
     [SerializeField] private bool giveObjective = false;
     [TextArea(3, 5), SerializeField] private string[] dialogue;
@@ -56,9 +56,9 @@ public class DialogueTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!enableTrigger) return;
+        //if (!enableTrigger) return;
     }
-    
+
     public bool HasInteracted => hasInteracted;
 
     public bool IsTalking => isTalking;

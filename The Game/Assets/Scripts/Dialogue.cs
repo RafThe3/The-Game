@@ -22,11 +22,13 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private float dialogueSpeed = 1;
     [SerializeField] private AudioClip dialogueSFX;
 
+    /*
     [Header("Interactables")]
     [SerializeField] private bool triggerInteractable = false;
     [SerializeField] private Interactable[] interactables;
     [SerializeField] private bool triggerDialogue = false;
     [SerializeField] private Dialogue[] npcs;
+    */
 
     private string[] dialogue;
     private string objectName;
@@ -135,7 +137,7 @@ public class Dialogue : MonoBehaviour
     public bool HasInteracted => hasInteracted;
     public void TriggerObjective(bool shouldTrigger) => giveObjective = shouldTrigger;
 
-    public void TriggerDialogue(bool shouldTrigger) => triggerDialogue = shouldTrigger;
+    //public void TriggerDialogue(bool shouldTrigger) => triggerDialogue = shouldTrigger;
 
     public void ToggleInteractBox(bool enable) => interactTextBox.enabled = enable;
 

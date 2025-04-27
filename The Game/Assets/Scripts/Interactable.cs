@@ -60,7 +60,7 @@ public class Interactable : MonoBehaviour
         }
         npc.SetDialogue(dialogue);
         //npc.EnableDialogue();
-        npc.TriggerDialogue(false);
+        //npc.TriggerDialogue(false);
         isInteractable = false;
         objective = string.Empty;
         if (destroyOnInteract)
